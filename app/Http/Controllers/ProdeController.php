@@ -44,17 +44,17 @@ class ProdeController extends Controller
     return response()->json(['data'=>$ducte],200);
     }
 
-    // public function update(Request $request, $id){
+    public function update(Request $request, $id){
 
-    //     $ductes = product_detail::find($id);
-    //     $ductes->product_id = $request->product_id;
-    //     $ductes->quantity = $request->quantity;
-    //     $ductes->price = $request->price;
-    //     $ductes->size =$request->size;
-    //     $ductes->color_id =$request->color_id;        
-    //     $ductes->save();
-    //    return response()->json(['data' =>$ducts],200);
-    // }
+        $ductes = product_detail::find($id);
+        $ductes->id = $request->id;
+        $ductes->quantity = $request->quantity;
+        $ductes->price = $request->price;
+        $ductes->size =$request->size;
+        $ductes->color_id =$request->color_id;        
+        $ductes->save();
+       return response()->json(['data' =>$ductes],200);
+    }
     public function destroy($id){
         
      $delprod = product_detail::find($id)->delete();

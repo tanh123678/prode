@@ -53,6 +53,7 @@ Route::prefix('admin')->group(function(){
 	route::post('/addprode','ProdeController@store')->name('add.prode');
 	route::delete('/delprode/{id}','ProdeController@destroy')->name('del.prode');
 	route::get('/editprode/{id}','ProdeController@edit')->name('edit.prode');
+	route::post('/updateprode/{id}','ProdeController@update')->name('update.prode');
 	//end prode
 	
 	Route::middleware('admin.auth')->group(function(){

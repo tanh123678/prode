@@ -153,7 +153,7 @@
 													<button type="submit" class="btn btn-primary">Add</button>
 												</form>
 											</div>
-											<div id="formedit">
+											{{-- <div id="formedit">
 												<form action="" method="POST" id="addformprode" class="" role="form" >
 												{{ csrf_field() }}
 													<h3>Edit</h3>
@@ -174,7 +174,7 @@
 
 													<button type="submit" class="btn btn-primary">Edit</button>
 												</form>
-											</div>
+											</div> --}}
 									</div>
 
 								</div>
@@ -232,21 +232,20 @@
 		</div>
 	</div>
 	{{-- Modal sửa prode --}}
-		<div class="modal fade" id="modal-edit-prode">
+		<div class="modal fade" id="modal-edit-prode" style="z-index: '10';">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
 				<form action=""​ id="form-edit-prode" method="POST" role="form" >
 					{{ csrf_field() }}
-
+					
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 						<h4 class="modal-title">Edit prode</h4>
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<label for="">product_id</label>
-							<input type="text" class="form-control" id="product_id-edit" placeholder="product_id" name="product_id">
+							<input type="hidden" class="form-control" id="idprode-edit" placeholder="id" name="id">
 						</div>
 						<div class="form-group">
 							<label for="">quantity</label>
@@ -350,9 +349,11 @@
               });
     });
 
-    $(document).on('click','edit-prod-btn',function(e){
+    $(document).on('click','.edit-prod-btn',function(e){
     	e.preventDefault();
-
+    	// $('#formedit').modal('show');
+    	// console.log('aaaa');
+    	$('#modal-edit-prode').modal('show');
     	var id=$(this).attr('data-id');
     	 $.ajax({
             //sử dụng phương thức get
@@ -362,10 +363,11 @@
             success: function (response) {
               // console.log(response);
               //hiển thị dữ liệu được controller trả về vào trong modal
-              $('#quantity-edit').text(response.data.quantity);
-              $('#price-edit').text(response.data.price).simpleMoneyFormat();
-              $('#size-edit').text(response.data.size);
-              $('#color_id-edit').text(response.data.color_id);
+              $('#idprode-edit').val(response.data.id);
+              $('#quantity-edit').val(response.data.quantity);
+              $('#price-edit').val(response.data.price).simpleMoneyFormat();
+              $('#size-edit').val(response.data.size);
+              $('#color_id-edit').val(response.data.color_id);
 
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -374,6 +376,40 @@
         });
 	          
    	})
+    $(document).on('submit','#form-edit-prode',function(e){
+		        e.preventDefault();
+		        //lấy data-url của form edit
+		        var id=$('#idprode-edit').val();
+		        // console.log(id);
+		        $.ajax({
+		          //phương thức put
+		          type: 'post',
+		          url: '/admin/updateprode/' + id,
+		          //lấy dữ liệu trong form
+		          data: {
+		            id: $('#idprode-edit').val(),
+		            quantity: $('#quantity-edit').val(),
+		            price: $('#price-edit').val(),
+		            size: $('#size-edit').val(),
+		            color_id: $('#color_id-edit').val(),
+		            _token: $('meta[name="csrf-token"]').attr('content'),		            
+		          },
+
+		          success: function (response) {
+		             console.log('aaa');
+		            //thông báo update thành công
+		            toastr.success('edit prode success!')
+		            //ẩn modal edit
+		            $('#modal-edit-prode').modal('hide');
+		            $('#addformprode')[0].reset();
+                  	$('#tableShow').DataTable().ajax.reload();
+		            
+		          },
+		          error: function (jqXHR, textStatus, errorThrown) {
+		            //xử lý lỗi tại đây
+		          }
+		        })
+	})    
 
 	$(document).on('click','.del-prod-btn',function(e){
 	    		e.preventDefault();
