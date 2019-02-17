@@ -1,5 +1,13 @@
 <?php
+use Gloudemans\Shoppingcart\ShoppingcartServiceProvider;
 
+Route::get('/cart', function () {
+	// Add some items in your Controller.
+	Cart::add('192ao12', 'Product 1', 1, 9.99);
+	Cart::add('1239ad0', 'Product 2', 2, 5.95, ['size' => 'large']);
+
+    return view('cart');
+});
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,7 +24,7 @@ Route::get('/test', function(){
 });
 Route::post('/test', 'HomeController@storeTest');
 
-route::get('/onl','ShopController@index');
+
 
 //user
 Route::prefix('')->group(function(){
@@ -31,7 +39,22 @@ Route::post('logout', 'Auth\LoginController@logout')->name('logout');
 // Route::resource('/user','UserController');
 Route::get('/home', 'HomeController@index')->name('home');
 
+	//onl
+route::get('/','ShopController@index')->name('home.onl');
+route::get('/checkout','ShopController@check');
+route::get('/detail/{id}','ShopController@detail')->name('detail.onl');
+Route::get('/add2cart/{id}', 'ShopController@add2cart');
+Route::get('/delete-cart/{id}', 'ShopController@destroy');
+route::get('/addorminus','ShopController@update');
 
+route::post('/getid','ShopController@getid');
+route::post('/getcolor','ShopController@getcl');
+
+//order
+route::post('/order','ShopController@homeonl');
+
+
+//endorder
 });
 //enduser
 
@@ -45,6 +68,9 @@ Route::prefix('admin')->group(function(){
 
 
 	route::resource('/product','ProductController');
+
+	route::post('/productupdate/{id}','ProductController@update');
+
 	route::post('/prod','ProductController@prod')->name('product.index');
 
 	//product detail
@@ -55,13 +81,24 @@ Route::prefix('admin')->group(function(){
 	route::get('/editprode/{id}','ProdeController@edit')->name('edit.prode');
 	route::post('/updateprode/{id}','ProdeController@update')->name('update.prode');
 	//end prode
-	
+
+	//orderprocess
+	route::get('/process','OrderController@index')->name('order.home');
+	route::post('/order','OrderController@getlist')->name('order.index');
+	route::get('/procorder/{id}','OrderController@proc')->name('order.process');
+
+	route::get('/confirm/{id}','OrderController@confirm');
+	route::get('/delorder/{id}','OrderController@delorder');
+	//endorder
+
+	//statistic
+	route::get('/daysta','StatisController@statistic');
+	// route::get('/statistic','StatisController@statistic');
+	//endsta
+
 	Route::middleware('admin.auth')->group(function(){
 		Route::resource('/user','UserController');
 		Route::resource('/ad','AdminController');
-		
-		
-
 
 	});
 

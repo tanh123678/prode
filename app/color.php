@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class color extends Model
+class Color extends Model
 {
      protected $table = 'color'; 
     protected $fillable = [

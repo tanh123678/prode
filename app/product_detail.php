@@ -4,19 +4,20 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class product_detail extends Model
+class Product_detail extends Model
 {
     protected $table = 'product_detail'; 
     protected $fillable = [
             'id',
-            'product_id',             
+            'name',
+            'product_id', 
+            'product_code',            
     		'quantity', 
-    		'price',
     		'color_id',
-            'size'
+            'size_id'
     		
     	]; 
-    public function products(){
+    public function Product(){
         return $this->belongsTo('App\products');
     }    
 }

@@ -18,13 +18,15 @@ class CreateProductDetailTable extends Migration
 
             $table->integer('product_id')->unsigned();
 
-            $table->integer('quantity')->unsigned();
+            $table->string('product_code');
 
-            $table->integer('price')->nullable();
+            $table->string('name');
+
+            $table->integer('quantity')->unsigned();
 
             $table->integer('color_id')->unsigned(); 
 
-            $table->string('size')->nullable();
+            $table->integer('size_id')->unsigned();
 
             $table->timestamps();
         });

@@ -270,10 +270,13 @@ desired effect
         <li class="header">HEADER</li>
         <!-- Optionally, you can add icons to the links -->
         {{-- <li class="active"><a href="{{route('shop.index')}}"><i class="fa fa-link"></i> <span>shop</span></a></li> --}}
-        <li><a href="{{asset('onl')}}"><i class="fa fa-link"></i> <span>shop</span></a></li>
-        <li><a href="{{asset('admin/ad')}}"><i class="fa fa-link"></i> <span>admins</span></a></li>
-        <li><a href="{{asset('admin/user')}}"><i class="fa fa-link"></i> <span>users</span></a></li>
-        <li><a href="{{asset('admin/product')}}"><i class="fa fa-link"></i> <span>prod</span></a></li>
+        <li id="treecolor"><a id="tree" href="{{asset('')}}"><i class="fa fa-link "></i> <span>shop</span></a></li>
+        <li id="treecolor"><a id="tree" href="{{asset('admin/ad')}}"><i class="fa fa-link" ></i> <span>admins</span></a></li>
+        <li id="treecolor" class="active"><a href="{{asset('admin/user')}}"><i class="fa fa-link"></i> <span>users</span></a></li>
+        <li id="treecolor"><a id="tree" href="{{asset('admin/product')}}"><i class="fa fa-link"></i> <span>prod</span></a></li>
+        <li id="treecolor"><a id="tree" href="{{asset('admin/process')}}"><i class="fa fa-link"></i> <span>order</span></a></li>
+        <li id="treecolor"><a id="tree" href="{{asset('admin/daysta')}}"><i class="fa fa-link"></i> <span>statistic</span></a></li>
+
 
         {{-- <li class="treeview">
           <a href="#"><i class="fa fa-link"></i> <span>Categories</span>
@@ -407,6 +410,11 @@ desired effect
 <script src="{{asset('new-admin/dist/js/adminlte.min.js')}}"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js" type="text/javascript" charset="utf-8" async defer></script>
+{{-- <script type="text/javascript">
+  $('#tree').click(function(){
+    $('#treecolor').css('color', 'red');
+  })
+</script> --}}
 {{-- <script>
     function myfunction(){
       if(!confirm("Chắc chưa"))
@@ -665,6 +673,10 @@ desired effect
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                   //xử lý lỗi tại đây
+                  $('.name-admin-error').text(jqXHR.responseJSON.error.name);
+                  $('.email-admin-error').text(jqXHR.responseJSON.error.email);
+                  $('.password-admin-error').text(jqXHR.responseJSON.error.password);
+
                 }
 
               });
@@ -739,6 +751,8 @@ desired effect
           success: function (response) {
             console.log(response);
             //đưa dữ liệu controller gửi về điền vào input trong form edit.
+            $('#form-edit-ad').attr('data-url','{{ asset('admin/ad')}}/'+response.data.id+'')
+
             $('#name-edit').val(response.data.name);
             $('#email-edit').val(response.data.email);
             //thêm data-url chứa route sửa todo đã được chỉ định vào form sửa.
@@ -754,7 +768,7 @@ desired effect
         e.preventDefault();
         //lấy data-url của form edit
         var url=$(this).attr('data-url');
-
+        // console.log(url);
         $.ajax({
           //phương thức put
           type: 'put',
@@ -769,8 +783,10 @@ desired effect
           },
 
           success: function (response) {
-             console.log('aaa');
+             
             //thông báo update thành công
+            $('#form-edit-ad').attr('data-url','{{ asset('/ad')}}/'+response.data.id+'')
+            // console.log(response.data.id);
             toastr.success('edit admin success!')
             //ẩn modal edit
             $('#modal-edit-ad').modal('hide');
@@ -780,6 +796,9 @@ desired effect
           },
           error: function (jqXHR, textStatus, errorThrown) {
             //xử lý lỗi tại đây
+                  $('.error-edit-name').text(jqXHR.responseJSON.error.name);
+                  $('.error-edit-email').text(jqXHR.responseJSON.error.email);
+
           }
         })
       })

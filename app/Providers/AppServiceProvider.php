@@ -3,7 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\color;
+use App\Color;
+use App\Size;
 use Illuminate\Support\Facades\View;
 class AppServiceProvider extends ServiceProvider
 {
@@ -16,7 +17,9 @@ class AppServiceProvider extends ServiceProvider
     {
         if(!\App::runningInConsole()){
             // View::share('categories', Category::all());
-            View::share('colortable', color::all());
+            View::share('colortable', Color::all());
+            View::share('sizes', Size::all());
+
         }
     }
 

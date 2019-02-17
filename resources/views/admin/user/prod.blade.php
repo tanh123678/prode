@@ -7,12 +7,13 @@
 	<button class="btn btn-success" data-toggle="modal" href='#modal-add-prod' id="add-btn">Add</button>
 	<table class="table table-bordered" id="posts-table">
 		<thead>
-			<th>id</th>
-			<th>slug</th>
+			<th>thumbnail</th>			
 			<th>code</th>
 			<th>name</th>
 			<th>sale_price</th>
+			<th>price</th>
 			<th>description</th>
+			<th>categories</th>
 			<th>action</th>
 		</thead>
 	</table>
@@ -25,23 +26,39 @@
 					
 					<div class="modal-body">
 						
-						<form action="" method="POST" id="addformprod" class="" role="form" >
+						<form action="" method="POST" id="addformprod" class="" role="form" enctype="multipart/form-data" file="true">
 							{{ csrf_field() }}
 							
 								<div class="form-group">
-									<legend>Add </legend>
+									<legend>Add Product</legend>
 								</div>
 
 								<div class="form-group">
 									
 									<label class="control-label" for="tag">Code:</label>
-									<input name="code" type="text" class="form-control" id="code" placeholder="">
+									<input name="code" type="text" class="form-control" id="code" placeholder="" required>
+									<span class="code-error" style="color: red;font-weight: bold"></span>
+									<br>
 									<label class="control-label" for="tag">Name:</label>
-									<input name="name" type="text" class="form-control" id="name" placeholder="" >
+									<input name="name" type="text" class="form-control" id="name" placeholder="" required>
+									<span class="name-error" style="color: red;font-weight: bold"></span>
+									<br>
 									<label class="control-label" for="tag">Sale_price:</label>
-									<input name="sale_price" type="text" class="form-control" id="sale_price" placeholder="">
+									<input name="sale_price" type="text" class="form-control" id="sale_price" placeholder="" required>
+									<span style="color: red;font-weight: bold" class="sale_price-error"></span>
+									<br>
+									<label class="control-label" for="tag">price:</label>
+									<input name="price" type="text" class="form-control" id="price" placeholder="" required>
+									<span class="price-error" style="color: red;font-weight: bold"></span>
+									<br>
 									<label class="control-label" for="tag">Description:</label>
-									<input name="description" type="text" class="form-control" id="description" placeholder="" >
+									{{-- <input name="description" type="text" class="form-control" id="description" placeholder="" > --}}<textarea name="description" class="form-control" id="description" cols="30" rows="10" required></textarea>
+									<span class="des-error" style="color: red;font-weight: bold"></span>
+									<br>
+
+
+									<input type="file"  name="thumbnail[]" id="thumbnail-upload" multiple>
+									<div id="preview"></div>
 								</div>
 							
 
@@ -62,7 +79,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Show tag</h4>
+						<h4 class="modal-title">Show Detail</h4>
 					</div>
 					<div class="modal-body" style="text-align: center;">
 						<table class="table table-bordered">
@@ -71,6 +88,7 @@
 									<th style="text-align: center;">Code</th>
 									<th style="text-align: center;">Name</th>
 									<th style="text-align: center;">Sale price</th>
+									<th style="text-align: center;">price</th>									
 									<th style="text-align: center;">Description</th>
 									
 								</tr>
@@ -80,6 +98,7 @@
 									<td id="code-show"></td>
 									<td id="name-show"></td>
 									<td id="sale-show"></td>
+									<td id="price-show"></td>
 									<td id="des-show"></td>								
 								</tr>
 							</tbody>
@@ -110,9 +129,8 @@
 									      <thead>
 									        <tr id="">									        	
 									          <th class="stl-column color-column">quantity</th>
-									          <th class="stl-column color-column">price</th>
 									          <th class="stl-column color-column">size</th>
-									          <th class="stl-column color-column">color_id</th>
+									          <th class="stl-column color-column">color</th>
 									          <th class="stl-column color-column">Hành động</th>
 									        </tr> 
 									      </thead>
@@ -121,7 +139,6 @@
 								     	 			
 								     	 			<td id="id-show"></td>
 													<td id="quan-show"></td>
-													<td id="price-show"></td>
 													<td id="size-show"></td>
 													<td id="color-show"></td>
 														
@@ -139,42 +156,38 @@
 												
 														
 														<label class="control-label" for="tag">quantity:</label>
-														<input name="quantity" type="text" class="form-control" id="quantity" placeholder="" >
-														<label class="control-label" for="tag">price:</label>
-														<input name="price" type="number" class="form-control" id="price" placeholder="">
+														<input name="quantity" type="text" class="form-control" id="quantity" placeholder="số lượng" required >
+														<span class="quan-error" style="color: red;font-weight: bold"></span>
+														<br>
 														<label class="control-label" for="tag">size:</label>
-														<input name="size" type="text" class="form-control" id="size" placeholder="" >
-														<label class="control-label" for="tag">color_id:</label>
-														<input name="color_id" type="text" class="form-control" id="color_id" placeholder="" >
-											
+														{{-- <input name="size" type="text" class="form-control" id="size" placeholder="" > --}}
+														<br>
+														
+															{{-- <label><input type="checkbox" name="sizedetail[]" value="{{$size->id}}" id="sizedetail{{$size->id}}">{{$size->name}}&nbsp;</label> --}}
+															<label ><select class="form-control">
+																@foreach ($sizes as $size)
+															    <option name="sizedetail[]" value="{{$size->id}}" id="sizedetail{{$size->id}}">{{$size->name}}&nbsp;</option>
+															    @endforeach
+															 </select></label>
+														
+														<br>
+														<label class="control-label" for="tag">color:</label>
+														<br>
+														
+															
+															<label><select class="form-control">
+															@foreach($colortable as $color)
+															    <option name="colordetail[]" id="colordetail{{$color->id}}"  value="{{$color->id}}" class="color">{{$color->color}}&nbsp;</option>
+															@endforeach
+															</select></label>
+														
 													</div>
 									
 
 													<button type="submit" class="btn btn-primary">Add</button>
 												</form>
 											</div>
-											{{-- <div id="formedit">
-												<form action="" method="POST" id="addformprode" class="" role="form" >
-												{{ csrf_field() }}
-													<h3>Edit</h3>
-													<div class="form-group">
-												
-														
-														<label class="control-label" for="tag">quantity:</label>
-														<input name="quantity" type="text" class="form-control" id="quantity-edit" placeholder="" >
-														<label class="control-label" for="tag">price:</label>
-														<input name="price" type="number" class="form-control" id="price-edit" placeholder="">
-														<label class="control-label" for="tag">size:</label>
-														<input name="size" type="text" class="form-control" id="size-edit" placeholder="" >
-														<label class="control-label" for="tag">color_id:</label>
-														<input name="color_id" type="text" class="form-control" id="color_id-edit" placeholder="" >
 											
-													</div>
-									
-
-													<button type="submit" class="btn btn-primary">Edit</button>
-												</form>
-											</div> --}}
 									</div>
 
 								</div>
@@ -187,7 +200,7 @@
 
 					</div>
 		</div>
-{{-- Modal sửa todo --}}
+{{-- Modal sửa product --}}
 
 	<div class="modal fade" id="modal-edit-prod">
 		<div class="modal-dialog">
@@ -203,23 +216,46 @@
 					<div class="modal-body">
 						<div class="form-group">
 							<label for="">Id</label>
-							<input type="text" class="form-control" id="id-edit" placeholder="id" name="id">
+							<input type="text" class="form-control" id="id-edit" placeholder="id" name="id" required> 
+							<span class="id-edit-error" style="color: red;font-weight: bold"></span>
 						</div>
 						<div class="form-group">
 							<label for="">Code</label>
-							<input type="text" class="form-control" id="code-edit" placeholder="code" name="code">
+							<input type="text" class="form-control" id="code-edit" placeholder="code" name="code" readonly>
+							<span class="code-edit-error" style="color: red;font-weight: bold"></span>
+
 						</div>
 						<div class="form-group">
 							<label for="">Tên</label>
-							<input type="text" class="form-control" id="name-edit" placeholder="Name" name="name">
+							<input type="text" class="form-control" id="name-edit" placeholder="Name" name="name" required>
+							<span class="name-edit-error" style="color: red;font-weight: bold"></span>
+
 						</div>
 						<div class="form-group">
 							<label for="">Sale_price</label>
-							<input type="text" class="form-control" id="Sale_price_edit" placeholder="sale_price" name="sale_price">
+							<input type="text" class="form-control" id="Sale_price_edit" placeholder="sale_price" name="sale_price" required>
+							<span class="sale_price-edit-error" style="color: red;font-weight: bold"></span>
+
+						</div>
+						<div class="form-group">
+							<label for="">price</label>
+							<input type="text" class="form-control" id="price_edit" placeholder="price" name="price" required>
+							<span class="price-edit-error" style="color: red;font-weight: bold"></span>
+
 						</div>
 						<div class="form-group">
 							<label class="control-label" >description:</label>
-							<input   type="text" class="form-control" id="des-edit" placeholder="description" name="description">
+							<input   type="text" class="form-control" id="des-edit" placeholder="description" name="description" required>
+							<span class="description-edit-error" style="color: red;font-weight: bold"></span>
+
+						</div>
+						<br>
+						<input name="thumbnailedit[]" id="edit-upload"  type="file" multiple>
+						<span class="thumbnail-error"></span>
+						<div id="edit-preview"></div>
+
+						<div class="append-img">
+							<p>OLd Images</p>
 						</div>
 					</div>
 						<div class="modal-footer">
@@ -249,19 +285,32 @@
 						</div>
 						<div class="form-group">
 							<label for="">quantity</label>
-							<input type="text" class="form-control" id="quantity-edit" placeholder="quantity" name="quantity">
+							<input type="text" class="form-control" id="quantity-edit" placeholder="quantity" name="quantity" required>
+							<span class="quan-edit-error" style="color: red;font-weight: bold"></span>
 						</div>
-						<div class="form-group">
-							<label for="">price</label>
-							<input type="text" class="form-control" id="price-edit" placeholder="price" name="price">
-						</div>
+						
 						<div class="form-group">
 							<label for="">size</label>
-							<input type="text" class="form-control" id="size-edit" placeholder="size" name="size">
+							{{-- <input type="text" class="form-control" id="size-edit" placeholder="size" name="size"> --}}
+							
+						  		<label>
+								<select class="form-control" id="size-detail" >
+									
+							    {{-- <option name="size" id="size-detail" value=""></option> --}}
+							    
+							  </select></label>
+						  	
 						</div>
 						<div class="form-group">
-							<label class="control-label" >color_id:</label>
-							<input   type="text" class="form-control" id="color_id-edit" placeholder="color_id" name="color_id">
+							{{-- <label class="control-label" >color_id:</label>
+							<input   type="text" class="form-control" id="color_id-edit" placeholder="color_id" name="color_id"> --}}
+							<label >color</label>
+							<label>
+								<select class="form-control" id="color-detail">
+							{{-- @foreach($colortable as $color)
+							<option name="color" id="color-detail{{$color->id}}" value="{{$color->id}}">{{$color->color}}&nbsp;</option>
+						  	@endforeach --}}
+						  	 </select></label>
 						</div>
 					</div>
 						<div class="modal-footer">
@@ -278,6 +327,7 @@
 @endsection	
 @section('footer')
 <!-- ./wrapper -->
+<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.15.0/jquery.validate.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
 <script src="{{asset('js/simple.money.format.js')}}"></script>
 <script src="{{asset('js/jquery.masknumber.js')}}"></script>
@@ -306,15 +356,15 @@
 				      ordering: false,
 				    
 				      ajax: {
+
 							url: '/admin/prode/' + id,
 							
 						},
 				        pageLength: 30,
 				        lengthMenu: [[30, 50, 100, 200, 500], [30, 50, 100, 200, 500]],
 				        columns: [
-				        {data: 'quantity', name: 'quantity'},
-				        {data: 'price', name: 'price' }, 				        
-				        {data: 'size', name: 'size'},
+				        {data: 'quantity', name: 'quantity'},			        
+				        {data: 'size_id', name: 'size_id'}, 
 				        {data: 'color_id', name: 'color_id'},
 				        {data: 'action', name: 'action', orderable: false, searchable: false, 'class':'text-center'},
 				        ]
@@ -322,6 +372,9 @@
 	}
 	$('#addformprode').submit(function(event) {
       event.preventDefault();
+		sizedetail =  $("option[name='sizedetail[]']:checked").val();
+		  // alert(sizedetail);              
+      	colordetail = $("option[name='colordetail[]']:checked").val();
 
       $.ajax({
         url: '/admin/addprode',
@@ -330,13 +383,12 @@
         data: {
 	        product_id: $('#prodeid').val(),
 	        quantity: $('#quantity').val(),
-	        price: $('#price').val(), 
-	        size: $('#size').val(),
-	        color_id: $('#color_id').val(),
+	        size_id: sizedetail,
+	        color_id: colordetail,
 	        _token: $('meta[name="csrf-token"]').attr('content')   
         },
         success: function(response){
-          toastr.success('Add new student success!');
+          toastr.success('Add new prode success!');
                   //ẩn modal add đi
                   $('#modal-add-prode').modal('hide');
                   $('#addformprode')[0].reset();
@@ -344,6 +396,7 @@
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                   //xử lý lỗi tại đây
+                  $('.quan-error').text(jqXHR.responseJSON.error.quantity);
                 }
 
               });
@@ -365,10 +418,13 @@
               //hiển thị dữ liệu được controller trả về vào trong modal
               $('#idprode-edit').val(response.data.id);
               $('#quantity-edit').val(response.data.quantity);
-              $('#price-edit').val(response.data.price).simpleMoneyFormat();
-              $('#size-edit').val(response.data.size);
-              $('#color_id-edit').val(response.data.color_id);
+              $('#size-detail').html( '<option value="'+response.size.size_id+'">'+response.size.name+'</option>' );
+              $('#color-detail').html( '<option value="'+response.color.color_id+'">'+response.color.name+'</option>' );
 
+              // $('#size-detail').val(response.data.size_id);
+              // $('#size-detail'+ response.data.size_id).prop('checked', 'checked').attr('disabled',true);
+              // $('#color_id-edit').val(response.data.color_id);
+              $('#color-detail'+ response.data.color_id).prop('checked', 'checked').attr('disabled',true);
             },
             error: function (jqXHR, textStatus, errorThrown) {
              
@@ -378,7 +434,8 @@
    	})
     $(document).on('submit','#form-edit-prode',function(e){
 		        e.preventDefault();
-		        //lấy data-url của form edit
+		        
+
 		        var id=$('#idprode-edit').val();
 		        // console.log(id);
 		        $.ajax({
@@ -389,9 +446,7 @@
 		          data: {
 		            id: $('#idprode-edit').val(),
 		            quantity: $('#quantity-edit').val(),
-		            price: $('#price-edit').val(),
-		            size: $('#size-edit').val(),
-		            color_id: $('#color_id-edit').val(),
+		            
 		            _token: $('meta[name="csrf-token"]').attr('content'),		            
 		          },
 
@@ -407,6 +462,8 @@
 		          },
 		          error: function (jqXHR, textStatus, errorThrown) {
 		            //xử lý lỗi tại đây
+                  $('.quan-edit-error').text(jqXHR.responseJSON.error.quantity);
+
 		          }
 		        })
 	})    
@@ -448,12 +505,13 @@
 
 			},
 			columns: [
-            { data: 'id', name: 'id' },
-            { data: 'slug', name: 'slug' },
+			{ data: 'thumbnail', name: 'thumbnail' },         
             { data: 'code', name: 'code' },
             { data: 'name', name: 'name' },
             { data: 'sale_price', name: 'sale_price' },
+            { data: 'price', name: 'price' },
             { data: 'description', name: 'description' },
+            { data: 'id', name: 'id' },
             { data: 'action', name: 'action' }
         ]
 		});
@@ -461,32 +519,53 @@
 
 	$('#addformprod').submit(function(event) {
       event.preventDefault();
-      
-    
+
+       	var fd = new FormData();
+      	var names = [];
+
+        var thumbnail = $('#thumbnail-upload')[0].files; 
+        
+        for (var i = 0; i < thumbnail.length; i++) {
+        	fd.append('thumbnail[]',thumbnail[i])
+        }
+        // fd.append('thumbnail[]',$('#thumbnail-upload')[0].files);
+        fd.append('code',$('#code').val());
+        fd.append('name',$('#name').val());
+
+        fd.append('sale_price',$('#sale_price').val());
+        fd.append('price',$('#price').val());
+        fd.append('description',$('#description').val());
+        fd.append('_token',$('meta[name="csrf-token"]').attr('content'));
+   //      
       $.ajax({
         url: '/admin/product',
         type: 'post',
-
-        data: {
-	        code: $('#code').val(),
-	        name: $('#name').val(),
-	        sale_price: $('#sale_price').val(), 
-	        description: $('#description').val(),
-	        _token: $('meta[name="csrf-token"]').attr('content')   
-        },
+        contentType: false,
+        processData: false,
+        data: fd,
         success: function(response){
           toastr.success('Add new student success!');
                   //ẩn modal add đi
                   $('#modal-add-prod').modal('hide');
+                  $('#code').val('');
+                  $('#name').val('');
+                  $('#sale_price').val('');
+                  $('#price').val('');
+                  $('#description').val('');
                   $('#posts-table').DataTable().ajax.reload();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                  //xử lý lỗi tại đây
+                  $('.code-error').text(jqXHR.responseJSON.error.code);
+                  $('.name-error').text(jqXHR.responseJSON.error.name);
+                  $('.sale_price-error').text(jqXHR.responseJSON.error.sale_price);
+                  $('.price-error').text(jqXHR.responseJSON.error.price);
+                  $('.des-error').text(jqXHR.responseJSON.error.description);
                 }
 
               });
     });
-		    $('#sale_price','#Sale_price_edit').maskNumber({
+
+		    $('#sale_price','#Sale_price_edit','#price','#price_edit').maskNumber({
 
 			  integer: true,
 			  thousands: ','
@@ -511,6 +590,7 @@
               $('#code-show').text(response.data.code);
               $('#name-show').text(response.data.name);
               $('#sale-show').text(response.data.sale_price).simpleMoneyFormat();
+              $('#price-show').text(response.data.price).simpleMoneyFormat();
               $('#des-show').text(response.data.description);
 
             },
@@ -571,45 +651,70 @@
 		            $('#code-edit').val(response.data.code);
 		            $('#name-edit').val(response.data.name);
 		            $('#Sale_price_edit').val(response.data.sale_price);
+		            $('#price_edit').val(response.data.price);
 		            $('#des-edit').val(response.data.description);
+		            $('.append-img').html(response.img);
 		          },
 		          error: function (error) {
 		            
 		          }
 		        });
 		      })
+
+	
 		$(document).on('submit','#form-edit-prod',function(e){
 		        e.preventDefault();
 		        //lấy data-url của form edit
 		        var id=$('#id-edit').val();
+		        var thumbnailedit = $('#edit-upload')[0].files;
+		        console.log(thumbnailedit);
+		        var form_data = new FormData();
 
+		        form_data.append('id', $('#id-edit').val());
+		        form_data.append('code', $('#code-edit').val());
+		        form_data.append('name', $('#name-edit').val());
+		        form_data.append('sale_price', $('#Sale_price_edit').val());
+		        form_data.append('price', $('#price_edit').val());
+		        form_data.append('description', $('#des-edit').val());
+		        // alert(thumbnailedit.length);
+		         for (var i = 0; i < thumbnailedit.length; i++) {
+		        	
+					    form_data.append('thumbnailedit[]', thumbnailedit[i]);
+					}
+					
+	         	form_data.append('id', id);
+		        form_data.append('_token',$('meta[name="csrf-token"]').attr('content'));
+		       
 		        $.ajax({
 		          //phương thức put
-		          type: 'put',
-		          url: "/admin/product/"+id,
+		          type: 'post',
+		          url: "/admin/productupdate/"+id,
 		          //lấy dữ liệu trong form
-		          data: {
-		          	id: $('#id-edit').val(),
-		            code: $('#code-edit').val(),
-		            name: $('#name-edit').val(),
-		            sale_price: $('#Sale_price_edit').val(),
-		            description: $('#des-edit').val(),
-		            _token: $('meta[name="csrf-token"]').attr('content'),
-		           
-		            
-		          },
-
+		          data: form_data,
+		          contentType: false,
+			      cache: false, 
+			      processData: false,
 		          success: function (response) {
-		             console.log('aaa');
+		       
 		            //thông báo update thành công
 		            toastr.success('edit product success!')
 		            //ẩn modal edit
+		            $('#edit-upload').val('');
+		            $('#edit-preview').text('');
 		            $('#modal-edit-prod').modal('hide');
+
 		            $('#posts-table').DataTable().ajax.reload();
 		            
 		          },
 		          error: function (jqXHR, textStatus, errorThrown) {
+		           	// $('.id-edit-error').text(jqXHR.responseJSON.error.id);
 		            //xử lý lỗi tại đây
+		           	$('.code-edit-error').text(jqXHR.responseJSON.error.code);
+	                $('.name-edit-error').text(jqXHR.responseJSON.error.name);
+	                $('.sale_price-edit-error').text(jqXHR.responseJSON.error.sale_price);
+	                $('.price-edit-error').text(jqXHR.responseJSON.error.price);
+	                // $('.thumbnail-errorr').text(jqXHR.responseJSON.error.thumbnail);
+	                $('.description-edit-error').text(jqXHR.responseJSON.error.description);
 		          }
 		        })
 		      })    
@@ -658,5 +763,59 @@
 
 		    $('div.setup-panel div a.btn-primary').trigger('click');
 		});
+</script>
+<script>
+		function previewImages() {
+
+		  var $preview = $('#preview').empty();
+		  if (this.files) $.each(this.files, readAndPreview);
+
+		  function readAndPreview(i, file) {
+		    
+		    if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+		      return alert(file.name +" is not an image");
+		    } // else...
+		    
+		    var reader = new FileReader();
+
+		    $(reader).on("load", function() {
+		      $preview.append($("<img/>", {src:this.result, height:100}));
+		    });
+
+		    reader.readAsDataURL(file);
+		    
+		  }
+
+		}
+
+		$('#thumbnail-upload').on("change", previewImages);
+</script>
+
+
+<script>
+	function previewImagess() {
+
+	  var $previeww = $('#edit-preview').empty();
+	  if (this.files) $.each(this.files, readAndPreviews);
+
+	  function readAndPreviews(i, file) {
+	    
+	    if (!/\.(jpe?g|png|gif)$/i.test(file.name)){
+	      return alert(file.name +" is not an image");
+	    } // else...
+	    
+	    var readerr = new FileReader();
+
+	    $(readerr).on("load", function() {
+	      $previeww.append($("<img/>", {src:this.result, height:100}));
+	    });
+
+	    readerr.readAsDataURL(file);
+	    
+	  }
+
+	}
+
+	$('#edit-upload').on("change", previewImagess);
 </script>
 @endsection

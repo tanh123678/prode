@@ -16,11 +16,14 @@ class CreateOrderDetailsTable​ extends Migration
         Schema::create('order_detail', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('order_code')->unique();
-             // tiêu đề bài viết
-            $table->string('product_code');
+            $table->string('order_id');
 
+            $table->string('order_code');
+
+             // tiêu đề bài viết
             $table->integer('product_id')->unsigned();
+
+            $table->string('product_code');
 
             $table->integer('product_detail_id')->unsigned();
 

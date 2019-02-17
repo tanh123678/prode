@@ -70,17 +70,23 @@
 						<form action="" method="POST" id="addformad" class="" role="form" data-url="">
 							{{ csrf_field() }}
 							<div class="form-group">
-								<legend>Add Tag</legend>
+								<legend>Add Admin</legend>
 							</div>
 
 							<div class="form-group">
 								
 								<label class="control-label" for="tag">Tên:</label>
-								<input name="name" type="text" class="form-control" id="name" placeholder="Enter tag" value="{{old('name')}}">
+								<input name="name" required type="text" class="form-control" id="name" placeholder="Enter tag" value="{{old('name')}}">
+								<span class="name-admin-error" style="color: red;font-weight: bold"></span>
+								<br>
 								<label class="control-label" for="tag">email:</label>
-								<input name="email" type="email" class="form-control" id="email" placeholder="Enter tag" value="{{old('email')}}">
+								<input name="email" required type="email" class="form-control" id="email" placeholder="Enter tag" value="{{old('email')}}">
+								<span class="email-admin-error" style="color: red;font-weight: bold"></span>
+								<br>
 								<label class="control-label" for="tag">pass:</label>
-								<input name="password" type="password" class="form-control" id="password" placeholder="Enter tag" value="{{old('password')}}">
+								<input name="password" required type="password" class="form-control" id="password" placeholder="Enter tag" value="{{old('password')}}">
+								<span class="password-admin-error" style="color: red;font-weight: bold"></span>
+								<br>
 							</div>
 							
 
@@ -99,7 +105,7 @@
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Show tag</h4>
+						<h4 class="modal-title">Show Admin</h4>
 					</div>
 					<div class="modal-body" style="text-align: center;">
 						<table class="table table-bordered">
@@ -136,22 +142,24 @@
 		<div class="modal-dialog">
 			<div class="modal-content">
 
-				<form action=""​ id="form-edit-ad" method="POST" role="form" data-url="{{ route('ad.update',$admin->id) }}">
+				<form action=""​ id="form-edit-ad" method="POST" role="form" >
 					{{ csrf_field() }}
 
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-						<h4 class="modal-title">Edit Tag</h4>
+						<h4 class="modal-title">Edit Admin</h4>
 					</div>
 					<div class="modal-body">
 
 						<div class="form-group">
 							<label for="">Tên</label>
-							<input type="text" class="form-control" id="name-edit" placeholder="Name">
+							<input type="text" class="form-control" id="name-edit" placeholder="Name" required>
+							<span class="error-edit-name" style="color: red;font-weight: bold"></span>
 						</div>
 						<div class="form-group">
 							<label class="control-label" >email:</label>
-							<input  name="email" type="text" class="form-control" id="email-edit" placeholder="email">
+							<input  name="email" type="text" class="form-control" id="email-edit" placeholder="email" required>
+							<span class="error-edit-email" style="color: red;font-weight: bold"></span>
 
 						</div>
 						

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Admin;
+use Validator;
 class AdminController extends Controller
 {
     public function index()
@@ -33,6 +34,14 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
+         $validator = Validator::make($request->all(), [
+           'name' => 'required|max:20',
+           'email' => 'required|max:35',
+           'password' => 'required|max:15',
+       ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
         $admin = new Admin;
         $admin->name = $request->name;
         $admin->email =$request->email;
@@ -76,13 +85,26 @@ class AdminController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+           'name' => 'required|max:20',
+           'email' => 'required|max:35',
+       ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 500);
+        }
 
-        $admin = Admin::find($id);
+        $admin = Admin::where('id', $id)->first();
         $admin->name = $request->name;
-        $admin->email = $request->email;
-        $admin->password =bcrypt($request->password);    
-        $admin->save();
-       return response()->json(['data' =>$admin],200);
+        $admin->password =bcrypt($request->password);
+        if ($admin->email == $request->email) {               
+            $admin->save();
+            return response()->json(['data' =>$admin],200);
+        }elseif ($request->email != $admin->email) {
+            $admin->email = $request->email;
+            $admin->save();
+            return response()->json(['data' =>$admin],200);
+        }       
+        
     }
 
     /**

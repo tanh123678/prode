@@ -20,14 +20,13 @@ class CreateOrderTable​ extends Migration
              // tiêu đề bài viết
             $table->integer('customer_id')->unsigned();
 
+            $table->string('name');
+
             $table->integer('mobile')->unsigned();
 
             $table->string('address');
 
             $table->integer('total')->unsigned();
-
-            // ảnh thu nhỏ của bài viết
-            $table->integer('user_id')->nullable();
 
             $table->integer('status');
              

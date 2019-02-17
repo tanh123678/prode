@@ -26,6 +26,7 @@ class CreateProductTable​ extends Migration
 
             $table->integer('sale_price')->nullable();
  
+            $table->integer('price')->nullable();
              // id của danh mục mà bài viết đang đứng
             $table->integer('category_id')->unsigned();
            // đếm lượt xem bài viết

@@ -4,6 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="csrf-token" content="{{ csrf_token() }}">​
 		 <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
 		<title>Electro - HTML Ecommerce Template</title>
@@ -26,6 +27,9 @@
 
  		<!-- Custom stlylesheet -->
  		<link type="text/css" rel="stylesheet" href="{{asset('shop/css/style.css')}}"/>
+ 		<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+ 		<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+
 
 		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -64,7 +68,7 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="#" class="logo">
-									<img src="./img/logo.png" alt="">
+									<img src="{{asset('shop/img/logo3.jpg')}}" style="width:160px;height:69px ; " alt="">
 								</a>
 							</div>
 						</div>
@@ -104,38 +108,32 @@
 									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 										<i class="fa fa-shopping-cart"></i>
 										<span>Your Cart</span>
-										<div class="qty">3</div>
+										<div class="qty" id="countsp">{{Cart::count()}}</div>
 									</a>
-									<div class="cart-dropdown">
+									<div class="cart-dropdown cartadd">
 										<div class="cart-list">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="{{asset('shop/img/product01.png')}}" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
-
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="{{asset('shop/img/product02.png')}}" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+											@if(Cart::content() != null)
+												@foreach (Cart::content() as $cart)
+													<div class="product-widget" id="quick-view-cart">
+														<div class="product-img">
+															<img src="{{asset($cart->options->thumbnail)}}" alt="">
+														</div>
+														<div class="product-body">
+															<h3 class="product-name" id="product-name" name="name"><a href="#">{{$cart->name}}</a></h3>
+															<h4 class="product-price" id="product-price" name="price"><span class="qty">{{$cart->price}}x{{$cart->qty}}</span></h4>
+															<h4 class="product-sico" id="product-sico" name="sico"><span class="sico">{{$cart->options->size}}x{{$cart->options->color}}</span></h4>
+														</div>
+														<button class="delete cart-del"  data-id="{{$cart->rowId}}"><i class="fa fa-close"></i></button>
+													</div>
+												@endforeach
+											@endif
 										</div>
-										<div class="cart-summary">
+										{{-- <div class="cart-summary">
 											<small>3 Item(s) selected</small>
 											<h5>SUBTOTAL: $2940.00</h5>
-										</div>
+										</div> --}}
 										<div class="cart-btns">
-											<a href="#">View Cart</a>
+											<a href="/checkout">View Cart</a>
 											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
@@ -170,13 +168,13 @@
 				<div id="responsive-nav">
 					<!-- NAV -->
 					<ul class="main-nav nav navbar-nav">
-						<li class="active"><a href="#">Home</a></li>
+						<li class="active"><a href="{{asset('')}}">Home</a></li>
 						<li><a href="#">Hot Deals</a></li>
 						<li><a href="#">Categories</a></li>
-						<li><a href="#">Laptops</a></li>
-						<li><a href="#">Smartphones</a></li>
-						<li><a href="#">Cameras</a></li>
-						<li><a href="#">Accessories</a></li>
+						<li><a href="#">Đồ ngủ</a></li>
+						<li><a href="#">Quần đùi</a></li>
+						<li><a href="#">Đồ lót</a></li>
+						<li><a href="#">Không liên quan</a></li>
 					</ul>
 					<!-- /NAV -->
 				</div>
@@ -187,7 +185,7 @@
 		<!-- /NAVIGATION -->
 
 		<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
+		{{-- <div id="breadcrumb" class="section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
@@ -204,7 +202,7 @@
 				<!-- /row -->
 			</div>
 			<!-- /container -->
-		</div>
+		</div> --}}
 		<!-- /BREADCRUMB -->
 
 		<!-- SECTION -->
@@ -284,10 +282,10 @@
 								<h3 class="footer-title">Categories</h3>
 								<ul class="footer-links">
 									<li><a href="#">Hot deals</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cameras</a></li>
-									<li><a href="#">Accessories</a></li>
+									<li><a href="#">Quần đùi</a></li>
+									<li><a href="#">Quần lót</a></li>
+									<li><a href="#">Xê chiêng</a></li>
+									<li><a href="#">cằc</a></li>
 								</ul>
 							</div>
 						</div>
@@ -362,6 +360,34 @@
 		<script src="{{asset('shop/js/nouislider.min.js')}}"></script>
 		<script src="{{asset('shop/js/jquery.zoom.min.js')}}"></script>
 		<script src="{{asset('shop/js/main.js')}}"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
 
+		<script>
+			 $(".cart-del").click(function(e) {
+	    	// console.log('abddd');
+		   		e.preventDefault(); 
+		    	var id = $(this).attr('data-id');
+			  // alert(id);
+			  if (confirm("Are you sure?")){
+		            $.ajax({
+		              //phương thức delete
+		              type: 'get',
+		              url: "/delete-cart/"+id ,
+		              data:{},
+		              success: function (response) {
+		                //thông báo xoá thành công bằng toastr
+		                toastr.success('delete product success!')
+		                location.reload();
+
+		                
+		              },
+		              error: function (error) {
+		                
+		              }
+		            })
+		          }
+			});
+		</script>
+@yield('footer')
 	</body>
 </html>
